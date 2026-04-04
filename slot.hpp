@@ -1,19 +1,19 @@
 
 #pragma once
 
-template <typename K, typename D>
+template <typename Key, typename Data>
 
 class Slot {
 public:
     Slot() : key(0), data(0) {}
-    Slot(K key, D data) {
+    Slot(const Key& key, const Data& data) {
         this->key = key;
         this->data = data;
     }
 
     ~Slot() = default;
 
-    D read_from_slot() {
+    Data read_from_slot() {
         return data;
     }
 
@@ -21,11 +21,11 @@ public:
         return key;
     }
 
-    void update_data(D data) {
+    void update_data(const Data& data) {
         this->data = data;
     }
 
 private:
-    K key;
-    D data;
+    Key key;
+    Data data;
 };

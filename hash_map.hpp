@@ -7,37 +7,38 @@
 #include "hash_slot.hpp"
 #include "slot.hpp"
 
-template <typename K, typename D>
+
+template <typename Key, typename Data>
 
 class HashMap {
 public:
     HashMap(int size) {
         this->size = size;
-        map.assign(size, HashSlot<K, D>());
+        map.assign(size, HashSlot<Key, Data>());
     }
 
     ~HashMap() = default;
 
-    void write(K key, D data) {
+    void write(const Key& key, const Data& data) {
         map[hash(key)].write_to_overflow(key, data);
     }
 
-    std::optional<D> read(K key) {
-        int idx;
+    std::optional<Data> read(const Key& key) {
         int h = hash(key);
-        if (!map[h].key_is_in_hash_slot(key, &idx)) {
+        std::optional<int> idx = map[h].key_is_in_hash_slot(key);
+        if (!idx.has_value()) {
             return std::nullopt;
         }
-        return map[h].read_from_overflow(idx);
+        return map[h].read_from_overflow(idx.value());
     }
 
-    void delete_key(K key) {
+    void delete_key(const Key& key) {
         int h = hash(key);
-        int idx;
-        if (!map[h].key_is_in_hash_slot(key, &idx)) {
+        std::optional<int> idx = map[h].key_is_in_hash_slot(key);
+        if (!idx.has_value()) {
             return;
         }
-        map[h].remove_from_overflow(idx);
+        map[h].remove_from_overflow(idx.value());
     }
 
     void print_map(void) {
@@ -59,11 +60,11 @@ public:
     }
     
 private:
-    int hash(K key) {
-        key = abs(key);
-        return key % size;
+    int hash(const Key& key) {
+        int hashed_key = abs(key);
+        return hashed_key % size;
     }
 
-    std::vector<HashSlot<K, D>> map;
+    std::vector<HashSlot<Key, Data>> map;
     int size;
 };

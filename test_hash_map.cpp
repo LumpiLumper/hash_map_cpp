@@ -17,34 +17,34 @@ using namespace std;
 int passed = 0;
 int failed = 0;
 
-void check_found(int key, int data, std::optional<int> val) {
+void check_found(int key, int data, optional<int> val) {
     if (val == data) {
-        std::cout << "[PASSED] key " << key << " found with data " << val.value() << std::endl;
+        cout << "[PASSED] key " << key << " found with data " << val.value() << endl;
         passed += 1;
     }
     else if (val != NULL) {
-        std::cout << "[FAILED] key " << key << " found with data " << val.value() << " expected data to be " << data << std::endl;
+        cout << "[FAILED] key " << key << " found with data " << val.value() << " expected data to be " << data << endl;
         failed += 1;
     }
     else {
-        std::cout << "[FAILED] key " << key << " not found, expected found" << std::endl;
+        cout << "[FAILED] key " << key << " not found, expected found" << endl;
         failed += 1;
     }
 }
 
-void check_not_found(int key, std::optional<int> val) {
-    if (val == std::nullopt) {
-        std::cout << "[PASSED] key " << key << " not found" << std::endl;
+void check_not_found(int key, optional<int> val) {
+    if (val == nullopt) {
+        cout << "[PASSED] key " << key << " not found" << endl;
         passed += 1;
     }
     else {
-        std:cout << "[FAILED] key " << key << " found with data " << val.value() << ", expected not found" << std::endl;
+        std:cout << "[FAILED] key " << key << " found with data " << val.value() << ", expected not found" << endl;
         failed += 1;
     }
 }
 
 int main() {
-    std::optional<int> val;
+    optional<int> val;
     HashMap<int, int> hash_map(10);
 
     hash_map.write(5, 10);
@@ -71,7 +71,9 @@ int main() {
     val = hash_map.read(0);
     check_found(0, 0, val);
 
-    std::printf("failed: %d\n", failed);
-    std::printf("passed: %d\n", passed);
+    cout << endl;
+    cout << "failed: " << failed << endl;
+    cout << "passed: " << passed << endl;
+
     return 0;
 }

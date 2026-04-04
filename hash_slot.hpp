@@ -5,21 +5,21 @@
 
 #include "slot.hpp"
 
-template <typename K, typename D>
+template <typename Key, typename Data>
 
 class HashSlot {
 public:
     HashSlot() {
         overflow_size = 0;
-        overflow.assign(0, Slot<K, D>());
+        overflow.assign(0, Slot<Key, Data>());
     }
 
     ~HashSlot() = default;
 
-    void write_to_overflow(K key, D data) {
-        int idx;
-        if (key_is_in_hash_slot(key, &idx)) {
-            overflow[idx].update_data(data);
+    void write_to_overflow(const Key& key, const Data& data) {
+        std::optional<int> idx = key_is_in_hash_slot(key);
+        if (idx.has_value()) {
+            overflow[idx.value()].update_data(data);
             return;
         }
         overflow.emplace_back(key, data);
@@ -27,7 +27,7 @@ public:
         return;
     }
 
-    D read_from_overflow(int idx) {
+    Data read_from_overflow(int idx) {
         return overflow[idx].read_from_slot();
     }
 
@@ -36,14 +36,13 @@ public:
         overflow_size -= 1;
     }
 
-    bool key_is_in_hash_slot(K key, int* idx) {
+    std::optional<int> key_is_in_hash_slot(const Key& key) {
         for (int i = 0; i < overflow_size; i++) {
             if (key == overflow[i].get_key()) {
-                *idx = i;
-                return true;
+                return i;
             }
         }
-        return false;
+        return std::nullopt;
     }
 
     void print_slots(void) {
@@ -66,6 +65,6 @@ public:
 
 private:
 
-    std::vector<Slot<K, D>> overflow;
+    std::vector<Slot<Key, Data>> overflow;
     int overflow_size;
 };
