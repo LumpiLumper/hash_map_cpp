@@ -1,17 +1,29 @@
 
 #pragma once
 
+template <typename V>
+
 class Slot {
 public:
-    Slot() : key(0), data(nullptr) {}
-    Slot(int key, void* data);
-    ~Slot();
-    void set(int key, void* data);
-    void* read_from_slot();
-    int get_key();
-    void update_data(void* data);
+    Slot::Slot(int key, void* data) {
+        this->key = key;
+        this->data = data;
+    }
+
+    void Slot::set(int key, V data) {
+        this->key = key;
+        this->data = data;
+    }
+
+    V Slot::read_from_slot() {
+        return data;
+    }
+
+    void Slot::update_data(V data) {
+        this->data = data;
+    }
 
 private:
     int key;
-    void* data;
+    V data;
 };
