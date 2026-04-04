@@ -5,21 +5,28 @@ template <typename V>
 
 class Slot {
 public:
-    Slot::Slot(int key, void* data) {
+    Slot() : key(0), data(0) {}
+    Slot(int key, V data) {
         this->key = key;
         this->data = data;
     }
 
-    void Slot::set(int key, V data) {
+    ~Slot() = default;
+
+    void set(int key, V data) {
         this->key = key;
         this->data = data;
     }
 
-    V Slot::read_from_slot() {
+    V read_from_slot() {
         return data;
     }
 
-    void Slot::update_data(V data) {
+    int get_key() {
+        return key;
+    }
+
+    void update_data(V data) {
         this->data = data;
     }
 
