@@ -2,41 +2,50 @@
 #pragma once
 
 #include <vector>
+#include <optional>
 
 #include "hash_slot.hpp"
 #include "slot.hpp"
 
-template <typename V>
+template <typename K, typename D>
 
 class HashMap {
 public:
     HashMap(int size) {
         this->size = size;
-        map.assign(size, HashSlot<V>());
+        map.assign(size, HashSlot<K, D>());
     }
 
     ~HashMap() = default;
 
-    void write(int key, V data) {
+    void write(K key, D data) {
         map[hash(key)].write_to_overflow(key, data);
     }
 
-    V read(int key) {
+    std::optional<D> read(K key) {
         int idx;
         int h = hash(key);
         if (!map[h].key_is_in_hash_slot(key, &idx)) {
-            return 0;
+            return std::nullopt;
         }
         return map[h].read_from_overflow(idx);
     }
 
-    void delete_key(int key) {
+    void delete_key(K key) {
         int h = hash(key);
         int idx;
         if (!map[h].key_is_in_hash_slot(key, &idx)) {
             return;
         }
         map[h].remove_from_overflow(idx);
+    }
+
+    void print_map(void) {
+        for (int i = 0; i < size; i++) {
+            std::cout << "Hash Slot: ";
+            std::cout << i << std::endl;
+            map[i].print_slots();
+        }
     }
 
     int max_overflow_in_map(void) {
@@ -50,11 +59,11 @@ public:
     }
     
 private:
-    int hash(int key) {
+    int hash(K key) {
         key = abs(key);
         return key % size;
     }
 
-    std::vector<HashSlot<V>> map;
+    std::vector<HashSlot<K, D>> map;
     int size;
 };

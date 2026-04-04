@@ -1,24 +1,19 @@
 
 #pragma once
 
-template <typename V>
+template <typename K, typename D>
 
 class Slot {
 public:
     Slot() : key(0), data(0) {}
-    Slot(int key, V data) {
+    Slot(K key, D data) {
         this->key = key;
         this->data = data;
     }
 
     ~Slot() = default;
 
-    void set(int key, V data) {
-        this->key = key;
-        this->data = data;
-    }
-
-    V read_from_slot() {
+    D read_from_slot() {
         return data;
     }
 
@@ -26,11 +21,11 @@ public:
         return key;
     }
 
-    void update_data(V data) {
+    void update_data(D data) {
         this->data = data;
     }
 
 private:
-    int key;
-    V data;
+    K key;
+    D data;
 };
