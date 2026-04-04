@@ -2,16 +2,25 @@
 
 #include "slot.hpp"
 
-Slot::Slot(int key, int idx, void* data) {
+Slot::Slot(int key, void* data) {
     this->key = key;
-    this->idx = idx;
     this->data = data;
-    used = true;
 }
 
 Slot::~Slot() {
     delete &key;
-    delete &idx;
     delete &data;
-    delete &used;
+}
+
+void Slot::set(int key, void* data) {
+    this->key = key;
+    this->data = data;
+}
+
+void* Slot::read_from_slot() {
+    return data;
+}
+
+void Slot::update_data(void* data) {
+    this->data = data;
 }
