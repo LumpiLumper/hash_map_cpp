@@ -41,9 +41,9 @@ public:
     }
 
     void print_map(void) {
+        std::cout << "---------- Map ----------" << std::endl;
         for (int i = 0; i < size; i++) {
-            std::cout << "Hash Slot: ";
-            std::cout << i << std::endl;
+            std::cout << "Hash Slot " << i << ":" << std::endl;
             map[i].print_slots();
         }
     }

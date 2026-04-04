@@ -49,12 +49,9 @@ public:
     void print_slots(void) {
         if (overflow_size > 0) {
             for (int u = 0; u < overflow_size; u++) {
-                std::cout << "  Slot ";
-                std::cout << u << std::endl;
-                std::cout << "      Key: ";
-                std::cout << overflow[u].get_key() << std::endl;
-                std::cout << "      Data: ";
-                std::cout << overflow[u].read_from_slot() << std::endl;
+                std::cout << "  Slot " << u << ":" << std::endl;
+                std::cout << "      Key: " << overflow[u].get_key() << std::endl;
+                std::cout << "      Data: " << overflow[u].read_from_slot() << std::endl;
             }
         }
         else {

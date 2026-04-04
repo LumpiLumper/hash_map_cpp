@@ -28,6 +28,7 @@ void check_found(int key, int data, std::optional<int> val) {
     }
     else {
         std::cout << "[FAILED] key " << key << " not found, expected found" << std::endl;
+        failed += 1;
     }
 }
 
@@ -44,7 +45,7 @@ void check_not_found(int key, std::optional<int> val) {
 
 int main() {
     std::optional<int> val;
-    HashMap<int, int> hash_map(7);
+    HashMap<int, int> hash_map(10);
 
     hash_map.write(5, 10);
     val = hash_map.read(5);
@@ -56,6 +57,9 @@ int main() {
     hash_map.write(5, 11);
     val = hash_map.read(5);
     check_found(5, 11, val);
+    hash_map.write(15, 75);
+    val = hash_map.read(15);
+    check_found(15, 75, val);
 
     hash_map.print_map();
 
