@@ -5,7 +5,7 @@ template <typename Key, typename Data>
 
 class Slot {
 public:
-    Slot() : key(0), data(0) {}
+    Slot() : key(), data() {}
     Slot(const Key& key, const Data& data) {
         this->key = key;
         this->data = data;
@@ -17,7 +17,7 @@ public:
         return data;
     }
 
-    int get_key() {
+    Key get_key() {
         return key;
     }
 

@@ -9,6 +9,8 @@ valgrind --leak-check=full --track-origins=yes ./test
 
 #include <iostream>
 #include <optional>
+#include <memory>
+#include <string>
 
 #include "hash_map.hpp"
 
@@ -22,7 +24,7 @@ void check_found(int key, int data, optional<int> val) {
         cout << "[PASSED] key " << key << " found with data " << val.value() << endl;
         passed += 1;
     }
-    else if (val != NULL) {
+    else if (val.has_value()) {
         cout << "[FAILED] key " << key << " found with data " << val.value() << " expected data to be " << data << endl;
         failed += 1;
     }
@@ -38,38 +40,52 @@ void check_not_found(int key, optional<int> val) {
         passed += 1;
     }
     else {
-        std:cout << "[FAILED] key " << key << " found with data " << val.value() << ", expected not found" << endl;
+        cout << "[FAILED] key " << key << " found with data " << val.value() << ", expected not found" << endl;
         failed += 1;
     }
 }
 
 int main() {
     optional<int> val;
-    HashMap<int, int> hash_map(10);
 
-    hash_map.write(5, 10);
-    val = hash_map.read(5);
+    auto hash_map = std::make_unique<HashMap<int, int>>(10);
+
+    hash_map->write(5, 10);
+    val = hash_map->read(5);
     check_found(5, 10, val);
     
-    val = hash_map.read(6);
+    val = hash_map->read(6);
     check_not_found(6, val);
 
-    hash_map.write(5, 11);
-    val = hash_map.read(5);
+    hash_map->write(5, 11);
+    val = hash_map->read(5);
     check_found(5, 11, val);
-    hash_map.write(15, 75);
-    val = hash_map.read(15);
+    hash_map->write(15, 75);
+    val = hash_map->read(15);
     check_found(15, 75, val);
 
-    hash_map.print_map();
+    hash_map->print_map();
 
-    hash_map.delete_key(5);
-    val = hash_map.read(5);
+    hash_map->delete_key(5);
+    val = hash_map->read(5);
     check_not_found(5, val);
 
-    hash_map.write(0, 0);
-    val = hash_map.read(0);
+    hash_map->write(0, 0);
+    val = hash_map->read(0);
     check_found(0, 0, val);
+
+    hash_map.reset();
+
+    auto string_hash_map = std::make_unique<HashMap<std::string, std::string>>(10);
+    
+    optional<string> string_val;
+
+    string_hash_map->write("Jon", "Hello");
+    string_val = string_hash_map->read("Jon");
+    
+    cout << string_val.value() << endl;
+
+
 
     cout << endl;
     cout << "failed: " << failed << endl;

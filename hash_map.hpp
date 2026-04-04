@@ -61,8 +61,8 @@ public:
     
 private:
     int hash(const Key& key) {
-        int hashed_key = abs(key);
-        return hashed_key % size;
+        int hashed_key = std::hash<Key>{}(key) % size;
+        return hashed_key;
     }
 
     std::vector<HashSlot<Key, Data>> map;
