@@ -13,7 +13,7 @@ public:
 
     ~Slot() = default;
 
-    Data read_from_slot() const {
+    Data get_data() const {
         return data;
     }
 
