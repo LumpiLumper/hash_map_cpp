@@ -13,11 +13,11 @@ public:
 
     ~Slot() = default;
 
-    Data read_from_slot() {
+    Data read_from_slot() const {
         return data;
     }
 
-    Key get_key() {
+    Key get_key() const {
         return key;
     }
 

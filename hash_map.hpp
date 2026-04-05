@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <vector>
 #include <optional>
 
@@ -23,7 +24,7 @@ public:
         map[hash(key)].write_to_overflow(key, data);
     }
 
-    std::optional<Data> read(const Key& key) {
+    std::optional<Data> read(const Key& key) const {
         int h = hash(key);
         std::optional<int> idx = map[h].key_is_in_hash_slot(key);
         if (!idx.has_value()) {
@@ -41,7 +42,7 @@ public:
         map[h].remove_from_overflow(idx.value());
     }
 
-    void print_map(void) {
+    void print_map(void) const {
         std::cout << "---------- Map ----------" << std::endl;
         for (int i = 0; i < size; i++) {
             std::cout << "Hash Slot " << i << ":" << std::endl;
@@ -49,7 +50,7 @@ public:
         }
     }
 
-    int max_overflow_in_map(void) {
+    int max_overflow_in_map(void) const {
         int max_overflow_size = 0;
         for (int i = 0; i < size; i++) {
             if (map[i].get_overflow_size() > max_overflow_size) {
@@ -60,11 +61,13 @@ public:
     }
     
 private:
-    int hash(const Key& key) {
+    int hash(const Key& key) const {
         int hashed_key = std::hash<Key>{}(key) % size;
         return hashed_key;
     }
 
     std::vector<HashSlot<Key, Data>> map;
     int size;
+    int n_entries;
+    float load_factor;
 };
