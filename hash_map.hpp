@@ -23,7 +23,7 @@ public:
 
     void write(const Key& key, const Data& data) {
         map[hash(key)].write_to_overflow(key, data);
-        if (load_factor() > target_load_factor) {
+        if (get_load_factor() > target_load_factor) {
             rehash();
         }
     }
@@ -54,7 +54,7 @@ public:
         else {
             new_size = map.size() + (map.size() / 2);
         }
-        while(load_factor() > target_load_factor) {
+        while(get_load_factor() > target_load_factor) {
             std::vector<HashSlot<Key, Data>> new_map;
             new_map = reassign_entries(new_size);
             map = std::move(new_map);
@@ -80,7 +80,7 @@ public:
         return max_overflow_size;
     }
 
-    float load_factor(void) const {
+    float get_load_factor(void) const {
         int n_entries = 0;
         
         for (int i = 0; i < map.size(); i++) {
@@ -91,6 +91,10 @@ public:
 
     void set_target_load_factor(float target_load_factor) {
         this->target_load_factor = target_load_factor;
+    }
+
+    float get_target_load_factor(void) const {
+        return target_load_factor;
     }
     
 private:
